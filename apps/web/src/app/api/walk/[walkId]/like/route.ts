@@ -4,23 +4,21 @@ import { createClient } from "@/lib/supabase/server";
 /**
  * POST /api/walk/[walkId]/like
  *
- * Toggles a like on a walk for the authenticated user.
- * Uses the `toggle_like()` database function for atomic like/unlike + count update.
+ * Toggles the like state for the authenticated user on the specified walk.
+ * Uses the `toggle_like` DB function for atomic toggle + count update.
  *
  * - Returns 401 if not authenticated
- * - Returns { liked, like_count } on success
- *
- * Requirements: 7.1, 7.4, 18.4
+ * - Returns { liked: boolean, like_count: number } on success
  */
 export async function POST(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ walkId: string }> }
 ) {
   try {
     const { walkId } = await params;
     const supabase = await createClient();
 
-    // Check authentication (Req 7.4)
+    // Check authentication
     const {
       data: { user },
       error: userError,
@@ -33,29 +31,19 @@ export async function POST(
       );
     }
 
-    // Call the toggle_like database function (Req 7.1, 18.4)
+    // Call atomic toggle_like function
     const { data, error: rpcError } = await supabase.rpc("toggle_like", {
       p_walk_id: walkId,
     });
 
     if (rpcError) {
-      // Walk not found or RLS denied access
-      if (rpcError.code === "23503") {
-        return NextResponse.json(
-          { error: "Walk not found" },
-          { status: 404 }
-        );
-      }
       throw rpcError;
     }
 
-    // toggle_like returns a single row with { liked, like_count }
-    const result = Array.isArray(data) ? data[0] : data;
-
-    return NextResponse.json({
-      liked: result.liked,
-      like_count: result.like_count,
-    });
+    return NextResponse.json(
+      { liked: data.liked, like_count: data.like_count },
+      { status: 200 }
+    );
   } catch {
     return NextResponse.json(
       { error: "An unexpected error occurred" },
