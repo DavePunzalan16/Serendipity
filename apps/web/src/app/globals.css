@@ -10,9 +10,12 @@
     --color-icon-bg: #222222;
     --color-offwhite: #C7C7C7;
     --color-dark-gray: #484848;
+    --font-display: 'Bebas Neue', cursive;
+    --font-body: 'Manrope', sans-serif;
   }
 
   body {
-    @apply bg-background text-offwhite font-body;
+    @apply bg-background text-offwhite;
+    font-family: var(--font-body);
   }
 }

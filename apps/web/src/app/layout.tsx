@@ -1,17 +1,5 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Manrope } from "next/font/google";
 import "./globals.css";
-
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-display",
-});
-
-const manrope = Manrope({
-  subsets: ["latin"],
-  variable: "--font-body",
-});
 
 export const metadata: Metadata = {
   title: "Wander - Discover Walks Together",
@@ -29,7 +17,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>): React.JSX.Element {
   return (
-    <html lang="en" className={`${bebasNeue.variable} ${manrope.variable}`}>
+    <html lang="en">
+      <head>
+        {/* Load fonts via CDN link tags — avoids build-time fetch issues */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@200..800&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
