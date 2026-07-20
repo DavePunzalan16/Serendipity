@@ -42,20 +42,20 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
     - Include visibility CHECK constraint on walks
     - _Requirements: 16.6, 5.3, 3.1_
 
-  - [ ] 2.2 Create social and media tables migration
+  - [x] 2.2 Create social and media tables migration
     - Create `walk_photos`, `walk_likes`, `walk_comments`, `push_tokens`, `badges`, `user_badges` tables
     - Include comment length CHECK constraint (1–1000 chars)
     - Include unique constraint on `walk_likes(user_id, walk_id)` and `push_tokens(user_id, token)`
     - _Requirements: 7.6, 12.6_
 
-  - [ ] 2.3 Create indexes migration
+  - [x] 2.3 Create indexes migration
     - Add spatial GiST indexes on `walks.start_point`, `walks.route_geometry`, `stops.position`
     - Add feed query indexes on `walks(user_id, created_at DESC)`, `walks(visibility)`
     - Add follow indexes on `follows(follower_id)`, `follows(following_id)`
     - Add comment/like indexes and trigram indexes for profile search
     - _Requirements: 8.7, 6.1, 5.5_
 
-  - [ ] 2.4 Create Row Level Security policies migration
+  - [x] 2.4 Create Row Level Security policies migration
     - Enable RLS on all tables
     - Implement profiles policies (public read, owner update)
     - Implement follows policies (authenticated insert/delete own, public read)
@@ -63,7 +63,7 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
     - Implement walk_photos, stops, walk_likes, walk_comments policies
     - _Requirements: 16.1, 16.2, 16.3, 16.4, 16.5_
 
-  - [ ] 2.5 Create database functions migration
+  - [x] 2.5 Create database functions migration
     - Implement `get_feed()` function with cursor-based pagination
     - Implement `discover_walks()` function with spatial filtering and sorting
     - Implement `toggle_like()` atomic function with count update
@@ -75,7 +75,7 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
     - **Property 3: New walks default to friends_only visibility**
     - **Validates: Requirements 3.3, 3.4, 3.5, 3.7, 3.1, 16.3**
 
-- [ ] 3. Shared packages implementation
+- [x] 3. Shared packages implementation
   - [x] 3.1 Implement `packages/shared-types` with all interfaces and enums
     - Define `User`, `Profile`, `Walk`, `Stop`, `WalkPhoto`, `FeedCard`, `Comment`, `FollowRelationship`, `Badge` interfaces
     - Define `VibeTag`, `VisibilitySetting` types
@@ -83,7 +83,7 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
     - Add Zod schemas for runtime validation of all request/response types
     - _Requirements: 14.2_
 
-  - [ ] 3.2 Implement `packages/api-client` with typed Supabase client
+  - [x] 3.2 Implement `packages/api-client` with typed Supabase client
     - Create Supabase client factory (`createSupabaseClient`) with typed database schema
     - Implement auth functions (signUp, signIn, OAuth, MFA enroll/verify, recovery code, AAL check, refresh, signOut)
     - Implement profile functions (getByUsername, update, uploadAvatar, search)
