@@ -100,7 +100,7 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
     - Provide tokens as CSS custom properties and as TypeScript constants
     - _Requirements: 14.4_
 
-- [ ] 4. Authentication system
+- [x] 4. Authentication system
   - [x] 4.1 Implement email signup and login flows
     - Create signup API route with Supabase Auth email/password
     - Create login API route
@@ -127,7 +127,7 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
     - Create mobile navigation guard for AAL enforcement
     - _Requirements: 2.5, 2.6_
 
-  - [ ] 4.5 Write property tests for authentication
+  - [x] 4.5 Write property tests for authentication
     - **Property 23: AAL enforcement on protected routes**
     - **Property 24: Recovery code single-use invalidation**
     - **Property 31: Unauthenticated API rejection**
@@ -138,7 +138,7 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 6. Social layer API implementation
-  - [ ] 6.1 Implement profile CRUD and search
+  - [x] 6.1 Implement profile CRUD and search
     - Create GET `/api/profile/[username]` route returning profile with public walk summaries
     - Create PATCH profile update endpoint (display_name, bio, favorite_vibes)
     - Implement avatar upload with image type validation (JPEG, PNG, WebP, GIF) and 5MB limit
@@ -152,7 +152,7 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
     - **Property 32: User search relevance**
     - **Validates: Requirements 4.2, 4.5, 16.2, 16.4, 16.5, 5.5**
 
-  - [ ] 6.3 Implement follow/unfollow system
+  - [x] 6.3 Implement follow/unfollow system
     - Create POST `/api/follow/[userId]` for following (with self-follow and duplicate prevention)
     - Create DELETE `/api/follow/[userId]` for unfollowing
     - Implement follower/following count increment/decrement atomically

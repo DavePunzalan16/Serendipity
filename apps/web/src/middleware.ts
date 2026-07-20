@@ -77,9 +77,10 @@ export const config = {
     /*
      * Match routes under /(main)/ and /api/ except:
      * - /api/auth/** (public auth callback endpoints)
+     * - /api/profile/** (public profile viewing and search; auth checked in route handlers)
      * - _next/static, _next/image, favicon.ico (Next.js internals)
      */
     "/(main)/:path*",
-    "/api/((?!auth).*)",
+    "/api/((?!auth|profile).*)",
   ],
 };
