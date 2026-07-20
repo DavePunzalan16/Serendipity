@@ -34,7 +34,7 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
     - Ensure all packages reference the shared config
     - _Requirements: 14.1_
 
-- [ ] 2. Database schema and migrations
+- [x] 2. Database schema and migrations
   - [x] 2.1 Create initial Supabase migration with PostGIS and core tables
     - Enable PostGIS extension
     - Create `profiles`, `follows`, `walks`, `stops` tables with all columns, constraints, and foreign keys
@@ -69,7 +69,7 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
     - Implement `toggle_like()` atomic function with count update
     - _Requirements: 6.1, 6.3, 8.1, 7.1_
 
-  - [ ] 2.6 Write property tests for visibility RLS logic
+  - [x] 2.6 Write property tests for visibility RLS logic
     - **Property 1: Walk visibility access control**
     - **Property 2: Unauthorized access returns opaque 404**
     - **Property 3: New walks default to friends_only visibility**
@@ -101,7 +101,7 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
     - _Requirements: 14.4_
 
 - [ ] 4. Authentication system
-  - [ ] 4.1 Implement email signup and login flows
+  - [x] 4.1 Implement email signup and login flows
     - Create signup API route with Supabase Auth email/password
     - Create login API route
     - Implement error message opacity (same error for invalid email or password)
@@ -109,7 +109,7 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
     - Implement silent session refresh on token expiry
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6_
 
-  - [ ] 4.2 Implement Google OAuth flow
+  - [x] 4.2 Implement Google OAuth flow
     - Configure Supabase Google OAuth provider
     - Implement OAuth redirect and callback handling for web
     - Implement OAuth redirect and callback handling for mobile (expo-auth-session)

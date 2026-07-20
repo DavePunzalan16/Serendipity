@@ -7,7 +7,14 @@
     "incremental": true,
     "plugins": [
       { "name": "next" }
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@wander/shared-types": ["../../packages/shared-types/src/index.ts"],
+      "@wander/api-client": ["../../packages/api-client/src/index.ts"],
+      "@wander/ui-tokens": ["../../packages/ui-tokens/src/index.ts"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "app/**/*.ts", "app/**/*.tsx", "next-env.d.ts"],
   "exclude": ["node_modules", ".next"]

@@ -13,7 +13,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.json",
     "lint": "echo \"lint not configured yet\"",
-    "test": "echo \"test not configured yet\""
+    "test": "vitest run"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.4",
@@ -21,6 +21,8 @@
   },
   "devDependencies": {
     "@types/geojson": "^7946.0.16",
-    "typescript": "^5.7.0"
+    "fast-check": "^4.9.0",
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.10"
   }
 }
