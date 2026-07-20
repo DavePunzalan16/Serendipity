@@ -17,6 +17,10 @@ export const metadata: Metadata = {
   title: "Wander - Discover Walks Together",
   description:
     "AI-curated walking routes with a social layer. Generate walks, share discoveries, and explore with friends.",
+  icons: {
+    icon: "/img/WandererIcon.png",
+    apple: "/img/WandererIcon.png",
+  },
 };
 
 export default function RootLayout({

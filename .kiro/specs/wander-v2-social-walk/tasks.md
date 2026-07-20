@@ -145,7 +145,7 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
     - Implement user search by username/display_name with trigram matching
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 5.5, 18.1_
 
-  - [ ] 6.2 Write property tests for profile operations
+  - [-] 6.2 Write property tests for profile operations
     - **Property 25: Profile update round-trip**
     - **Property 26: Avatar upload validation**
     - **Property 27: Owner-only write operations**
@@ -159,12 +159,12 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
     - Expose follower and following counts on profile
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.6, 18.2_
 
-  - [ ] 6.4 Write property tests for follow system
+  - [-] 6.4 Write property tests for follow system
     - **Property 4: Follow/unfollow round-trip preserves counts**
     - **Property 5: Follow constraint enforcement**
     - **Validates: Requirements 5.1, 5.2, 5.3, 5.4**
 
-  - [ ] 6.5 Implement social feed with cursor pagination
+  - [-] 6.5 Implement social feed with cursor pagination
     - Create GET `/api/feed` with cursor-based pagination
     - Filter to walks from followed users with visibility 'public' or 'friends_only'
     - Return FeedCard data (narrative snippet, route thumbnail, distance, duration, vibe tags, like/comment counts, is_liked)
@@ -177,7 +177,7 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
     - **Property 8: Feed card data completeness**
     - **Validates: Requirements 6.1, 6.2, 6.3, 6.4**
 
-  - [ ] 6.7 Implement like toggle and comments
+  - [-] 6.7 Implement like toggle and comments
     - Create POST `/api/walk/[walkId]/like` as toggle using `toggle_like()` DB function
     - Create POST `/api/walk/[walkId]/comment` with text validation (non-empty, ≤1000 chars)
     - Implement comment retrieval in chronological order with cursor pagination
@@ -204,7 +204,7 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
     - **Property 15: Walk clone preserves route and stops**
     - **Validates: Requirements 8.1, 8.2, 8.3, 8.4, 8.6**
 
-  - [ ] 6.11 Implement walk visibility management
+  - [-] 6.11 Implement walk visibility management
     - Create PATCH `/api/walk/[walkId]/visibility` accepting new visibility setting
     - Enforce owner-only updates
     - _Requirements: 3.2, 18.7_

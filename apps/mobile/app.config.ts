@@ -6,7 +6,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   slug: "wander",
   version: "2.0.0",
   orientation: "portrait",
-  icon: "./assets/icon.png",
+  icon: "./assets/WandererIcon.png",
   userInterfaceStyle: "dark",
   scheme: "wander",
   splash: {
@@ -30,7 +30,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     adaptiveIcon: {
-      foregroundImage: "./assets/adaptive-icon.png",
+      foregroundImage: "./assets/WandererIcon.png",
       backgroundColor: "#1E0031",
     },
     package: "com.wander.app",
