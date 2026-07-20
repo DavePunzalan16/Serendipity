@@ -42,24 +42,32 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // TODO: Refresh session — this call also refreshes expired tokens
+  // Refresh session — this call also refreshes expired tokens
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // TODO: If no session and accessing protected route, redirect to login
+  // If no session and accessing protected route, redirect to login
   if (!user) {
     const loginUrl = new URL("/login", request.url);
     return NextResponse.redirect(loginUrl);
   }
 
-  // TODO: Check AAL level for MFA enforcement
-  // const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-  // if (aalData?.currentLevel === 'aal1' && aalData?.nextLevel === 'aal2') {
-  //   // User has MFA enrolled but hasn't completed challenge this session
-  //   const mfaUrl = new URL('/mfa-challenge', request.url);
-  //   return NextResponse.redirect(mfaUrl);
-  // }
+  // Check AAL level for MFA enforcement (Requirements 2.5, 2.6)
+  // If user has enrolled MFA (nextLevel === 'aal2') but hasn't verified
+  // this session (currentLevel === 'aal1'), redirect to the challenge page.
+  const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+
+  if (aalData?.currentLevel === 'aal1' && aalData?.nextLevel === 'aal2') {
+    // Don't redirect if already on the MFA challenge page to avoid infinite loop
+    const pathname = request.nextUrl.pathname;
+    if (pathname === '/mfa-challenge') {
+      return response;
+    }
+
+    const mfaUrl = new URL('/mfa-challenge', request.url);
+    return NextResponse.redirect(mfaUrl);
+  }
 
   return response;
 }

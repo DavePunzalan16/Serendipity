@@ -115,14 +115,14 @@ This plan implements the Wander v2 social walking-discovery app as a Turborepo +
     - Implement OAuth redirect and callback handling for mobile (expo-auth-session)
     - _Requirements: 1.2_
 
-  - [ ] 4.3 Implement MFA enrollment and challenge
+  - [x] 4.3 Implement MFA enrollment and challenge
     - Create MFA enrollment endpoint (TOTP secret generation, QR code, confirmation)
     - Generate and display recovery codes on enrollment confirmation
     - Create MFA challenge endpoint (TOTP verification)
     - Implement recovery code verification with single-use invalidation
     - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-  - [ ] 4.4 Implement AAL enforcement middleware
+  - [x] 4.4 Implement AAL enforcement middleware
     - Create web middleware that checks AAL level on protected routes and redirects to MFA challenge if aal1
     - Create mobile navigation guard for AAL enforcement
     - _Requirements: 2.5, 2.6_
