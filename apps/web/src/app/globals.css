@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: #C3B1FF;
+    --color-background: #1E0031;
+    --color-surface: #1A1A1A;
+    --color-icon-bg: #222222;
+    --color-offwhite: #C7C7C7;
+    --color-dark-gray: #484848;
+  }
+
+  body {
+    @apply bg-background text-offwhite font-body;
+  }
+}

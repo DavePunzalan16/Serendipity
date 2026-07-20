@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "noUncheckedIndexedAccess": true,
+    "noEmit": false,
+    "paths": {
+      "@wander/shared-types": ["./packages/shared-types/src/index.ts"],
+      "@wander/api-client": ["./packages/api-client/src/index.ts"],
+      "@wander/ui-tokens": ["./packages/ui-tokens/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "dist", ".next", ".expo"]
+}
