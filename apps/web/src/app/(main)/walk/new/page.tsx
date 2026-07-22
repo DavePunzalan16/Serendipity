@@ -1,228 +1,143 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { PageContainer } from '@/components/layout';
+import { TimeSlider, VibeChips, WalkPreviewCard, StopList } from '@/components/walk';
+import { ChallengeCard } from '@/components/gamification';
+import { Button } from '@/components/ui';
+import type { VibeTag, Stop } from '@wander/shared-types';
 
-interface GeneratedStop {
-  id: string;
-  name: string;
-  description: string;
-  order: number;
-}
-
-interface GeneratedWalk {
-  id: string;
-  title: string;
-  narrative: string;
-  distance: string;
-  duration: string;
-  stops: GeneratedStop[];
-  vibeTags: string[];
-}
-
-const VIBE_OPTIONS = [
-  'cozy', 'urban', 'nature', 'historic', 'artsy',
-  'foodie', 'nightlife', 'scenic', 'adventure', 'hidden-gems',
-];
+// Placeholder stop data for preview
+const PLACEHOLDER_STOPS: Stop[] = [
+  {
+    id: 's1',
+    order_index: 0,
+    title: 'The Green Bean Café',
+    description: 'Start your journey with a warm latte at this ivy-covered corner café.',
+    latitude: 40.7128,
+    longitude: -74.006,
+    visited: false,
+  },
+  {
+    id: 's2',
+    order_index: 1,
+    title: 'Riverside Park Lookout',
+    description: 'A quiet bench overlooking the river. Perfect for people-watching.',
+    latitude: 40.7138,
+    longitude: -74.008,
+    visited: false,
+  },
+  {
+    id: 's3',
+    order_index: 2,
+    title: 'Vintage Books & Vinyl',
+    description: 'Browse rare finds in this two-story bookshop with a hidden vinyl collection upstairs.',
+    latitude: 40.715,
+    longitude: -74.005,
+    visited: false,
+  },
+] as Stop[];
 
 export default function NewWalkPage() {
   const [duration, setDuration] = useState(30);
-  const [selectedVibes, setSelectedVibes] = useState<string[]>([]);
-  const [generating, setGenerating] = useState(false);
-  const [generatedWalk, setGeneratedWalk] = useState<GeneratedWalk | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [selectedVibes, setSelectedVibes] = useState<VibeTag[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [walkGenerated, setWalkGenerated] = useState(false);
 
-  function toggleVibe(vibe: string) {
-    setSelectedVibes((prev) =>
-      prev.includes(vibe) ? prev.filter((v) => v !== vibe) : [...prev, vibe]
-    );
-  }
-
-  async function handleGenerate() {
-    if (selectedVibes.length === 0) {
-      setError('Please select at least one vibe');
-      return;
-    }
-
-    try {
-      setError(null);
-      setGenerating(true);
-      setGeneratedWalk(null);
-
-      const res = await fetch('/api/walk/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ duration, vibes: selectedVibes }),
-      });
-
-      if (!res.ok) throw new Error('Failed to generate walk');
-      const data = await res.json();
-      setGeneratedWalk(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
-    } finally {
-      setGenerating(false);
-    }
-  }
+  const handleGenerate = useCallback(async () => {
+    setIsGenerating(true);
+    // Simulating API call
+    await new Promise((r) => setTimeout(r, 1500));
+    setWalkGenerated(true);
+    setIsGenerating(false);
+  }, []);
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8 px-4 py-6">
-      {/* Header */}
-      <div>
-        <h1 className="font-display text-4xl text-white md:text-5xl">Generate a Walk</h1>
-        <p className="mt-2 font-body text-base text-offwhite">
-          Choose your vibe and duration, and we'll craft a unique walking route for you.
-        </p>
-      </div>
+    <PageContainer className="py-12">
+      <h1 className="mb-2 font-display text-5xl tracking-tight text-white md:text-6xl">
+        New Walk
+      </h1>
+      <p className="mb-10 font-body text-base text-offwhite/70">
+        Set your preferences and we'll generate a unique route for you.
+      </p>
 
-      {/* Duration Slider */}
-      <div className="rounded-xl border border-dark-gray bg-surface p-6">
-        <label className="text-sm font-medium uppercase tracking-wide text-offwhite">
-          Duration
-        </label>
-        <div className="mt-3 flex items-center gap-4">
-          <input
-            type="range"
-            min={15}
-            max={120}
-            step={5}
-            value={duration}
-            onChange={(e) => setDuration(Number(e.target.value))}
-            className="flex-1 accent-primary"
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
+        {/* Left: Configuration */}
+        <div className="lg:col-span-2">
+          {/* Duration */}
+          <section className="mb-8">
+            <h2 className="mb-4 font-body text-lg font-semibold text-white">
+              How long do you want to walk?
+            </h2>
+            <TimeSlider value={duration} onChange={setDuration} className="max-w-md" />
+          </section>
+
+          {/* Vibe selection */}
+          <section className="mb-8">
+            <h2 className="mb-4 font-body text-lg font-semibold text-white">
+              Pick your vibe
+            </h2>
+            <VibeChips selected={selectedVibes} onChange={setSelectedVibes} />
+          </section>
+
+          {/* Generate button */}
+          <Button
+            onClick={handleGenerate}
+            loading={isGenerating}
+            disabled={selectedVibes.length === 0}
+            className="mb-10"
+          >
+            {isGenerating ? 'Generating...' : 'Generate Walk'}
+          </Button>
+
+          {/* Generated walk preview */}
+          {walkGenerated && (
+            <section className="space-y-6">
+              <h2 className="font-display text-3xl text-white">Your Walk</h2>
+
+              <WalkPreviewCard
+                title="Hidden Gems of Riverside"
+                narrative="A curated stroll through quiet alleyways and charming spots along the waterfront. Discover vintage shops, cozy cafés, and a park overlook with panoramic views."
+                vibeTags={selectedVibes.length > 0 ? selectedVibes : ['cozy', 'hidden-gems']}
+                durationMinutes={duration}
+                distanceKm={2.4}
+                stopCount={3}
+              />
+
+              <h3 className="font-body text-base font-semibold text-white">Stops</h3>
+              <StopList stops={PLACEHOLDER_STOPS} />
+
+              <Button className="w-full sm:w-auto">Start Walking</Button>
+            </section>
+          )}
+        </div>
+
+        {/* Right: Active challenges */}
+        <aside className="space-y-4">
+          <h2 className="font-display text-2xl text-white">Active Challenges</h2>
+          <ChallengeCard
+            title="Weekend Wanderer"
+            description="Complete 3 walks this weekend"
+            current={1}
+            target={3}
+            icon="🚶"
           />
-          <span className="w-20 rounded-lg border border-dark-gray bg-background px-3 py-1.5 text-center text-sm font-bold text-white">
-            {duration} min
-          </span>
-        </div>
-        <div className="mt-2 flex justify-between text-xs text-offwhite/50">
-          <span>15 min</span>
-          <span>120 min</span>
-        </div>
+          <ChallengeCard
+            title="Vibe Collector"
+            description="Walk with 5 different vibes"
+            current={3}
+            target={5}
+            icon="✨"
+          />
+          <ChallengeCard
+            title="Social Explorer"
+            description="Walk a route shared by a friend"
+            current={0}
+            target={1}
+            icon="🤝"
+          />
+        </aside>
       </div>
-
-      {/* Vibe Tag Selector */}
-      <div className="rounded-xl border border-dark-gray bg-surface p-6">
-        <label className="text-sm font-medium uppercase tracking-wide text-offwhite">
-          Select Vibes
-        </label>
-        <p className="mt-1 text-xs text-offwhite/60">Choose one or more to shape your walk</p>
-        <div className="mt-4 flex flex-wrap gap-2.5">
-          {VIBE_OPTIONS.map((vibe) => (
-            <button
-              key={vibe}
-              onClick={() => toggleVibe(vibe)}
-              className={`rounded-full border px-4 py-2 text-sm font-medium capitalize transition-all ${
-                selectedVibes.includes(vibe)
-                  ? 'border-primary bg-primary/20 text-primary shadow-[0_0_12px_rgba(195,177,255,0.15)]'
-                  : 'border-dark-gray text-offwhite hover:border-primary/50 hover:text-primary'
-              }`}
-            >
-              {vibe}
-            </button>
-          ))}
-        </div>
-        {selectedVibes.length > 0 && (
-          <p className="mt-3 text-xs text-offwhite/60">
-            Selected: {selectedVibes.join(', ')}
-          </p>
-        )}
-      </div>
-
-      {/* Error Message */}
-      {error && (
-        <p className="text-sm text-red-400">{error}</p>
-      )}
-
-      {/* Generate Button */}
-      <button
-        onClick={handleGenerate}
-        disabled={generating}
-        className="w-full rounded-full bg-primary py-3.5 text-center text-sm font-bold uppercase text-black transition-opacity hover:opacity-90 disabled:opacity-50"
-      >
-        {generating ? 'Generating...' : 'Generate Walk'}
-      </button>
-
-      {/* Loading Animation */}
-      {generating && (
-        <div className="flex flex-col items-center gap-4 py-8">
-          <div className="relative h-16 w-16">
-            <div className="absolute inset-0 animate-ping rounded-full bg-primary/20" />
-            <div className="absolute inset-2 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-            <div className="absolute inset-4 rounded-full bg-primary/30" />
-          </div>
-          <p className="animate-pulse text-sm text-offwhite">
-            Crafting your perfect walk...
-          </p>
-        </div>
-      )}
-
-      {/* Generated Walk Preview */}
-      {generatedWalk && !generating && (
-        <div className="space-y-6 rounded-xl border border-primary/30 bg-surface p-6">
-          <div>
-            <h2 className="font-display text-2xl text-white">{generatedWalk.title}</h2>
-            <div className="mt-2 flex flex-wrap gap-2">
-              <span className="rounded-full border border-dark-gray px-3 py-1 text-xs text-offwhite">
-                {generatedWalk.distance}
-              </span>
-              <span className="rounded-full border border-dark-gray px-3 py-1 text-xs text-offwhite">
-                {generatedWalk.duration}
-              </span>
-              {generatedWalk.vibeTags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Narrative */}
-          <p className="font-body text-sm leading-relaxed text-offwhite">
-            {generatedWalk.narrative}
-          </p>
-
-          {/* Stops List */}
-          <div>
-            <h3 className="text-sm font-medium uppercase tracking-wide text-offwhite">
-              Stops ({generatedWalk.stops.length})
-            </h3>
-            <div className="mt-3 space-y-2.5">
-              {generatedWalk.stops.map((stop, i) => (
-                <div
-                  key={stop.id}
-                  className="flex items-start gap-3 rounded-lg border border-dark-gray bg-background p-3"
-                >
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-black">
-                    {i + 1}
-                  </div>
-                  <div>
-                    <h4 className="font-body text-sm font-medium text-white">{stop.name}</h4>
-                    <p className="mt-0.5 text-xs text-offwhite/80">{stop.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <a
-              href={`/walk/${generatedWalk.id}`}
-              className="flex-1 rounded-full bg-primary py-3 text-center text-sm font-bold uppercase text-black transition-opacity hover:opacity-90"
-            >
-              Start Walking
-            </a>
-            <button
-              onClick={handleGenerate}
-              className="flex-1 rounded-full border border-dark-gray py-3 text-center text-sm font-bold uppercase text-offwhite transition-colors hover:border-primary hover:text-primary"
-            >
-              Regenerate
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+    </PageContainer>
   );
 }
