@@ -1,8 +1,32 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { LoginForm, GoogleOAuthButton } from '@/components/auth';
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [error, setError] = useState('');
+
+  const handleLogin = async (email: string, password: string) => {
+    setError('');
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Invalid email or password');
+        return;
+      }
+      router.push('/feed');
+    } catch {
+      setError('Something went wrong. Please try again.');
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
@@ -24,7 +48,7 @@ export default function LoginPage() {
       </div>
 
       {/* Login form */}
-      <LoginForm />
+      <LoginForm onSubmit={handleLogin} error={error} />
 
       {/* Sign up link */}
       <p className="text-center font-body text-sm text-offwhite/70">

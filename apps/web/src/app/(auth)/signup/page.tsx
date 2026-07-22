@@ -1,8 +1,32 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { SignupForm, GoogleOAuthButton } from '@/components/auth';
 
 export default function SignupPage() {
+  const router = useRouter();
+  const [error, setError] = useState('');
+
+  const handleSignup = async (email: string, password: string) => {
+    setError('');
+    try {
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Failed to create account');
+        return;
+      }
+      router.push('/feed');
+    } catch {
+      setError('Something went wrong. Please try again.');
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
@@ -24,7 +48,7 @@ export default function SignupPage() {
       </div>
 
       {/* Signup form */}
-      <SignupForm />
+      <SignupForm onSubmit={handleSignup} error={error} />
 
       {/* Login link */}
       <p className="text-center font-body text-sm text-offwhite/70">
