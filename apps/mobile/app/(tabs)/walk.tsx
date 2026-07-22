@@ -1,101 +1,81 @@
-import { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  SafeAreaView,
-  ActivityIndicator,
-} from "react-native";
+import { useState } from 'react';
+import { SafeAreaView, ScrollView, View, Text, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
+import { TimeSlider, VibeChips, GenerateButton, WalkPreviewCard, StopList } from '../../src/components/walk';
+import { ChallengeCard } from '../../src/components/gamification';
+import type { VibeTag, Walk, Stop } from '@wander/shared-types';
 
-interface WalkStop {
-  id: string;
-  name: string;
-  description: string;
-  type: string;
-}
-
-interface GeneratedWalk {
-  title: string;
-  duration: string;
-  distance: string;
-  stops: WalkStop[];
-}
-
-const DURATION_OPTIONS: { label: string; minutes: number }[] = [
-  { label: "15 min", minutes: 15 },
-  { label: "30 min", minutes: 30 },
-  { label: "45 min", minutes: 45 },
-  { label: "60 min", minutes: 60 },
-  { label: "90 min", minutes: 90 },
+const MOCK_STOPS: Stop[] = [
+  {
+    id: 's1',
+    walk_id: 'generated-1',
+    name: 'The Painted Alley',
+    description: 'A narrow lane covered in vibrant street murals dating back to the 1990s.',
+    narrative: 'The colors here shift with the light — morning pastels, afternoon neons.',
+    order_index: 0,
+    position: { type: 'Point', coordinates: [-74.006, 40.7128] },
+    visited: false,
+    visited_at: null,
+    place_id: null,
+  },
+  {
+    id: 's2',
+    walk_id: 'generated-1',
+    name: 'Café Obscura',
+    description: 'Tiny espresso spot with rotating local art displays and a hidden courtyard.',
+    narrative: 'Order the house blend and ask about the rotating exhibit in the back.',
+    order_index: 1,
+    position: { type: 'Point', coordinates: [-74.004, 40.714] },
+    visited: false,
+    visited_at: null,
+    place_id: null,
+  },
+  {
+    id: 's3',
+    walk_id: 'generated-1',
+    name: 'River Bend Overlook',
+    description: 'A quiet bench with a view of the old stone bridge and passing boats.',
+    narrative: 'Pause here. Watch the water. The bridge has stood for over a century.',
+    order_index: 2,
+    position: { type: 'Point', coordinates: [-74.001, 40.716] },
+    visited: false,
+    visited_at: null,
+    place_id: null,
+  },
+  {
+    id: 's4',
+    walk_id: 'generated-1',
+    name: 'The Book Garden',
+    description: 'An open-air reading nook hidden behind the library with vintage shelves.',
+    narrative: 'Take a book, leave a book. The garden smells of old paper and jasmine.',
+    order_index: 3,
+    position: { type: 'Point', coordinates: [-73.998, 40.718] },
+    visited: false,
+    visited_at: null,
+    place_id: null,
+  },
 ];
 
-const VIBE_TAGS: string[] = [
-  "Chill",
-  "Artsy",
-  "Historic",
-  "Nature",
-  "Foodie",
-  "Nighttime",
-  "Adventurous",
-  "Scenic",
-  "Urban",
-  "Cozy",
-  "Surprise Me",
-];
-
-const MOCK_WALK: GeneratedWalk = {
-  title: "Hidden Art Trail",
-  duration: "35 min",
-  distance: "1.9 km",
-  stops: [
-    {
-      id: "s1",
-      name: "The Painted Alley",
-      description: "A narrow lane covered in vibrant street murals",
-      type: "🎨",
-    },
-    {
-      id: "s2",
-      name: "Café Obscura",
-      description: "Tiny espresso spot with rotating local art displays",
-      type: "☕",
-    },
-    {
-      id: "s3",
-      name: "River Bend Overlook",
-      description: "A quiet bench with a view of the old stone bridge",
-      type: "🌉",
-    },
-    {
-      id: "s4",
-      name: "The Book Garden",
-      description: "An open-air reading nook hidden behind the library",
-      type: "📚",
-    },
-  ],
+const MOCK_GENERATED_WALK: Pick<Walk, 'title' | 'narrative' | 'duration_minutes' | 'distance_km' | 'vibe_tags' | 'stops'> = {
+  title: 'Hidden Art Trail',
+  narrative: 'A curated path through the lesser-known murals, tucked-away cafés, and secret overlooks of the arts district.',
+  duration_minutes: 35,
+  distance_km: 1.9,
+  vibe_tags: ['artsy', 'urban'],
+  stops: MOCK_STOPS,
 };
 
 export default function WalkGenerationScreen(): JSX.Element {
-  const [selectedDuration, setSelectedDuration] = useState<number>(30);
-  const [selectedVibes, setSelectedVibes] = useState<string[]>([]);
-  const [generatedWalk, setGeneratedWalk] = useState<GeneratedWalk | null>(
-    null
-  );
+  const router = useRouter();
+  const [duration, setDuration] = useState(30);
+  const [selectedVibes, setSelectedVibes] = useState<VibeTag[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
-
-  const toggleVibe = (vibe: string) => {
-    setSelectedVibes((prev) =>
-      prev.includes(vibe) ? prev.filter((v) => v !== vibe) : [...prev, vibe]
-    );
-  };
+  const [generatedWalk, setGeneratedWalk] = useState<typeof MOCK_GENERATED_WALK | null>(null);
 
   const handleGenerate = () => {
     setIsGenerating(true);
-    // Simulate AI generation delay
     setTimeout(() => {
-      setGeneratedWalk(MOCK_WALK);
+      setGeneratedWalk(MOCK_GENERATED_WALK);
       setIsGenerating(false);
     }, 2000);
   };
@@ -103,7 +83,7 @@ export default function WalkGenerationScreen(): JSX.Element {
   const handleReset = () => {
     setGeneratedWalk(null);
     setSelectedVibes([]);
-    setSelectedDuration(30);
+    setDuration(30);
   };
 
   return (
@@ -119,129 +99,58 @@ export default function WalkGenerationScreen(): JSX.Element {
         </Text>
 
         {!generatedWalk ? (
-          <>
-            {/* Duration Picker */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Duration</Text>
-              <View style={styles.durationRow}>
-                {DURATION_OPTIONS.map((option) => (
-                  <TouchableOpacity
-                    key={option.minutes}
-                    style={[
-                      styles.durationChip,
-                      selectedDuration === option.minutes &&
-                        styles.durationChipActive,
-                    ]}
-                    onPress={() => setSelectedDuration(option.minutes)}
-                  >
-                    <Text
-                      style={[
-                        styles.durationChipText,
-                        selectedDuration === option.minutes &&
-                          styles.durationChipTextActive,
-                      ]}
-                    >
-                      {option.label}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
+          <View style={styles.formSection}>
+            <TimeSlider value={duration} onChange={setDuration} />
 
-            {/* Vibe Tags Multi-select */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Vibes</Text>
-              <Text style={styles.sectionHint}>
-                Select one or more (optional)
-              </Text>
-              <View style={styles.vibeGrid}>
-                {VIBE_TAGS.map((vibe) => (
-                  <TouchableOpacity
-                    key={vibe}
-                    style={[
-                      styles.vibeTag,
-                      selectedVibes.includes(vibe) && styles.vibeTagActive,
-                    ]}
-                    onPress={() => toggleVibe(vibe)}
-                  >
-                    <Text
-                      style={[
-                        styles.vibeTagText,
-                        selectedVibes.includes(vibe) &&
-                          styles.vibeTagTextActive,
-                      ]}
-                    >
-                      {vibe}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
+            <View style={styles.spacer} />
 
-            {/* Generate Button */}
-            <TouchableOpacity
-              style={[
-                styles.generateButton,
-                isGenerating && styles.generateButtonDisabled,
-              ]}
+            <VibeChips
+              selected={selectedVibes}
+              onChange={setSelectedVibes}
+              maxSelection={3}
+            />
+
+            <View style={styles.spacer} />
+
+            <GenerateButton
               onPress={handleGenerate}
+              loading={isGenerating}
               disabled={isGenerating}
-            >
-              {isGenerating ? (
-                <ActivityIndicator color="#0A0A0A" size="small" />
-              ) : (
-                <Text style={styles.generateButtonText}>Generate Walk</Text>
-              )}
-            </TouchableOpacity>
-          </>
+            />
+
+            <View style={styles.challengeSection}>
+              <Text style={styles.sectionTitle}>Active Challenge</Text>
+              <ChallengeCard
+                title="Weekend Explorer"
+                description="Complete 3 walks this weekend to earn the Explorer badge"
+                progress={0.33}
+                timeRemaining="2 days left"
+              />
+            </View>
+          </View>
         ) : (
-          /* Generated Walk Result */
-          <View style={styles.resultContainer}>
-            <View style={styles.resultHeader}>
-              <Text style={styles.resultTitle}>{generatedWalk.title}</Text>
-              <View style={styles.resultMeta}>
-                <Text style={styles.resultMetaText}>
-                  🚶 {generatedWalk.duration}
-                </Text>
-                <Text style={styles.resultMetaText}>
-                  📍 {generatedWalk.distance}
-                </Text>
-                <Text style={styles.resultMetaText}>
-                  📌 {generatedWalk.stops.length} stops
-                </Text>
-              </View>
+          <View style={styles.resultSection}>
+            <WalkPreviewCard walk={generatedWalk} />
+
+            <View style={styles.spacer} />
+
+            <Text style={styles.sectionTitle}>Your Stops</Text>
+            <View style={styles.stopListWrapper}>
+              <StopList stops={generatedWalk.stops} />
             </View>
 
-            <View style={styles.stopsContainer}>
-              <Text style={styles.stopsTitle}>Your stops</Text>
-              {generatedWalk.stops.map((stop, index) => (
-                <View key={stop.id} style={styles.stopItem}>
-                  <View style={styles.stopNumber}>
-                    <Text style={styles.stopNumberText}>{index + 1}</Text>
-                  </View>
-                  <View style={styles.stopContent}>
-                    <View style={styles.stopHeader}>
-                      <Text style={styles.stopEmoji}>{stop.type}</Text>
-                      <Text style={styles.stopName}>{stop.name}</Text>
-                    </View>
-                    <Text style={styles.stopDescription}>
-                      {stop.description}
-                    </Text>
-                  </View>
-                </View>
-              ))}
+            <View style={styles.actionsRow}>
+              <GenerateButton
+                onPress={() => router.push(`/walk/generated-1`)}
+                loading={false}
+                disabled={false}
+              />
             </View>
 
-            <View style={styles.resultActions}>
-              <TouchableOpacity style={styles.startButton}>
-                <Text style={styles.startButtonText}>Start Walk</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.regenerateButton}
-                onPress={handleReset}
-              >
-                <Text style={styles.regenerateButtonText}>Try Again</Text>
-              </TouchableOpacity>
+            <View style={styles.resetRow}>
+              <Text style={styles.resetLink} onPress={handleReset}>
+                ← Try different settings
+              </Text>
             </View>
           </View>
         )}
@@ -253,7 +162,7 @@ export default function WalkGenerationScreen(): JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1E0031",
+    backgroundColor: '#1E0031',
   },
   scrollView: {
     flex: 1,
@@ -265,196 +174,48 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: "700",
-    color: "#FFFFFF",
+    fontWeight: '700',
+    color: '#FFFFFF',
     marginBottom: 8,
   },
   headerSubtitle: {
     fontSize: 15,
-    color: "#C7C7C7",
+    color: '#C7C7C7',
     marginBottom: 32,
   },
-  section: {
-    marginBottom: 28,
+  formSection: {
+    gap: 0,
+  },
+  resultSection: {
+    gap: 0,
+  },
+  spacer: {
+    height: 24,
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#FFFFFF",
+    fontWeight: '600',
+    color: '#FFFFFF',
     marginBottom: 12,
-  },
-  sectionHint: {
-    fontSize: 13,
-    color: "#C7C7C7",
-    marginBottom: 12,
-  },
-  durationRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-  },
-  durationChip: {
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 100,
-    borderWidth: 1,
-    borderColor: "#484848",
-  },
-  durationChipActive: {
-    backgroundColor: "#C3B1FF",
-    borderColor: "#C3B1FF",
-  },
-  durationChipText: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#C7C7C7",
-  },
-  durationChipTextActive: {
-    color: "#0A0A0A",
-    fontWeight: "700",
-  },
-  vibeGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-  },
-  vibeTag: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 100,
-    borderWidth: 1,
-    borderColor: "#484848",
-  },
-  vibeTagActive: {
-    backgroundColor: "#2A1A3E",
-    borderColor: "#C3B1FF",
-  },
-  vibeTagText: {
-    fontSize: 14,
-    color: "#C7C7C7",
-    fontWeight: "500",
-  },
-  vibeTagTextActive: {
-    color: "#C3B1FF",
-    fontWeight: "600",
-  },
-  generateButton: {
-    backgroundColor: "#C3B1FF",
-    borderRadius: 100,
-    paddingVertical: 16,
-    alignItems: "center",
-    marginTop: 12,
-  },
-  generateButtonDisabled: {
-    opacity: 0.7,
-  },
-  generateButtonText: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: "#0A0A0A",
-    textTransform: "uppercase",
-  },
-  resultContainer: {
     marginTop: 8,
   },
-  resultHeader: {
-    backgroundColor: "#1A1A1A",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 20,
-  },
-  resultTitle: {
-    fontSize: 22,
-    fontWeight: "700",
-    color: "#FFFFFF",
-    marginBottom: 12,
-  },
-  resultMeta: {
-    flexDirection: "row",
-    gap: 16,
-  },
-  resultMetaText: {
-    fontSize: 14,
-    color: "#C7C7C7",
-  },
-  stopsContainer: {
-    marginBottom: 24,
-  },
-  stopsTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#FFFFFF",
-    marginBottom: 16,
-  },
-  stopItem: {
-    flexDirection: "row",
-    marginBottom: 16,
-  },
-  stopNumber: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: "#C3B1FF",
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 12,
-    marginTop: 2,
-  },
-  stopNumberText: {
-    fontSize: 13,
-    fontWeight: "700",
-    color: "#0A0A0A",
-  },
-  stopContent: {
-    flex: 1,
-    backgroundColor: "#1A1A1A",
-    borderRadius: 12,
-    padding: 14,
-  },
-  stopHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 6,
-    gap: 8,
-  },
-  stopEmoji: {
-    fontSize: 18,
-  },
-  stopName: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: "#FFFFFF",
-  },
-  stopDescription: {
-    fontSize: 13,
-    lineHeight: 18,
-    color: "#C7C7C7",
-  },
-  resultActions: {
+  challengeSection: {
+    marginTop: 32,
     gap: 12,
   },
-  startButton: {
-    backgroundColor: "#C3B1FF",
-    borderRadius: 100,
-    paddingVertical: 16,
-    alignItems: "center",
+  stopListWrapper: {
+    maxHeight: 320,
   },
-  startButtonText: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: "#0A0A0A",
-    textTransform: "uppercase",
+  actionsRow: {
+    marginTop: 24,
   },
-  regenerateButton: {
-    borderRadius: 100,
-    paddingVertical: 14,
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#484848",
+  resetRow: {
+    marginTop: 16,
+    alignItems: 'center',
   },
-  regenerateButtonText: {
+  resetLink: {
     fontSize: 14,
-    fontWeight: "600",
-    color: "#C7C7C7",
+    fontWeight: '600',
+    color: '#C3B1FF',
   },
 });

@@ -1,29 +1,144 @@
-import { View, Text, StyleSheet } from "react-native";
+import { useState } from 'react';
+import { SafeAreaView, View, Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { useRouter } from 'expo-router';
+import { LoginForm, GoogleOAuthButton } from '../../src/components/auth';
 
 export default function LoginScreen(): JSX.Element {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [error, setError] = useState<string | undefined>();
+
+  const handleLogin = (email: string, password: string) => {
+    setLoading(true);
+    setError(undefined);
+    // Simulate login
+    setTimeout(() => {
+      setLoading(false);
+      // On success: router.replace('/(tabs)/feed');
+    }, 1500);
+  };
+
+  const handleGoogleOAuth = () => {
+    setGoogleLoading(true);
+    // Simulate Google OAuth flow
+    setTimeout(() => {
+      setGoogleLoading(false);
+    }, 2000);
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome back</Text>
-      <Text style={styles.subtitle}>Sign in to continue your walks</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.keyboardView}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <View style={styles.content}>
+          <View style={styles.header}>
+            <Text style={styles.logo}>Wander</Text>
+            <Text style={styles.title}>Welcome back</Text>
+            <Text style={styles.subtitle}>Sign in to continue your walks</Text>
+          </View>
+
+          <LoginForm
+            onSubmit={handleLogin}
+            loading={loading}
+            error={error}
+          />
+
+          <View style={styles.dividerRow}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>or</Text>
+            <View style={styles.dividerLine} />
+          </View>
+
+          <View style={styles.oauthSection}>
+            <GoogleOAuthButton
+              onPress={handleGoogleOAuth}
+              loading={googleLoading}
+            />
+          </View>
+
+          <View style={styles.footer}>
+            <Text style={styles.footerText}>
+              Don't have an account?{' '}
+              <Text
+                style={styles.footerLink}
+                onPress={() => router.push('/(auth)/signup')}
+              >
+                Sign Up
+              </Text>
+            </Text>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 24,
+    backgroundColor: '#1E0031',
+  },
+  keyboardView: {
+    flex: 1,
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 32,
+  },
+  logo: {
+    fontSize: 40,
+    fontWeight: '700',
+    color: '#C3B1FF',
+    marginBottom: 16,
   },
   title: {
-    fontSize: 32,
-    fontWeight: "700",
-    color: "#FFFFFF",
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#FFFFFF',
     marginBottom: 8,
   },
   subtitle: {
-    fontSize: 16,
-    color: "#C7C7C7",
+    fontSize: 15,
+    color: '#C7C7C7',
+  },
+  dividerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    marginVertical: 20,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#484848',
+  },
+  dividerText: {
+    fontSize: 13,
+    color: '#484848',
+    marginHorizontal: 12,
+    fontWeight: '500',
+  },
+  oauthSection: {
+    paddingHorizontal: 16,
+  },
+  footer: {
+    alignItems: 'center',
+    marginTop: 32,
+  },
+  footerText: {
+    fontSize: 14,
+    color: '#C7C7C7',
+  },
+  footerLink: {
+    color: '#C3B1FF',
+    fontWeight: '700',
   },
 });
