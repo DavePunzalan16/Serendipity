@@ -82,7 +82,7 @@ export default function LandingPage() {
 
             <h1 className="font-display text-6xl leading-[0.9] text-white md:text-8xl lg:text-[101px]">
               Every Step is a<br />
-              <span className="text-primary">Discovery</span>
+              <span className="text-gradient">Discovery</span>
             </h1>
 
             <p className="mt-6 max-w-lg font-body text-lg text-offwhite md:text-xl">
@@ -93,7 +93,7 @@ export default function LandingPage() {
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <a
                 href="#features"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-4 font-body text-base font-bold uppercase text-black transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                className="btn-3d inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-4 font-body text-base font-bold uppercase text-black transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 Start Walking
                 <svg
@@ -129,7 +129,7 @@ export default function LandingPage() {
               height="24"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#C3B1FF"
+              stroke="#00D26A"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -147,7 +147,7 @@ export default function LandingPage() {
         >
           <div className="mx-auto max-w-[1224px]">
             <h2 className="text-center font-display text-5xl text-white md:text-7xl lg:text-[76px] animate-fade-in-up">
-              Walk Smarter
+              Walk <span className="text-gradient">Smarter</span>
             </h2>
             <p className="mx-auto mt-4 max-w-md text-center font-body text-lg text-offwhite animate-fade-in-up [animation-delay:100ms]">
               Everything you need for the perfect walk, powered by AI.
@@ -157,7 +157,7 @@ export default function LandingPage() {
               {features.map((feature, i) => (
                 <article
                   key={feature.title}
-                  className="group rounded-2xl border border-dark-gray/50 bg-surface/60 p-6 backdrop-blur-sm transition-colors hover:border-primary/40 hover:bg-surface animate-fade-in-up"
+                  className="card-3d group rounded-2xl border border-dark-gray/50 bg-surface/60 p-6 backdrop-blur-sm transition-colors hover:border-primary/40 hover:bg-surface animate-fade-in-up"
                   style={{ animationDelay: `${(i + 1) * 100}ms` }}
                 >
                   <div className="mb-4 flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl bg-icon-bg">
@@ -190,7 +190,7 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.03] to-transparent" />
           <div className="relative mx-auto max-w-[1224px]">
             <h2 className="text-center font-display text-5xl text-white md:text-7xl lg:text-[76px] animate-fade-in-up">
-              How It Works
+              How It <span className="text-gradient">Works</span>
             </h2>
             <p className="mx-auto mt-4 max-w-md text-center font-body text-lg text-offwhite animate-fade-in-up [animation-delay:100ms]">
               Three simple steps to your next adventure.
@@ -200,7 +200,7 @@ export default function LandingPage() {
               {steps.map((step, i) => (
                 <div
                   key={step.title}
-                  className="relative flex flex-col items-center text-center animate-fade-in-up"
+                  className="card-3d relative flex flex-col items-center text-center animate-fade-in-up"
                   style={{ animationDelay: `${(i + 1) * 150}ms` }}
                 >
                   {/* Connector line between steps (desktop) */}
@@ -238,7 +238,7 @@ export default function LandingPage() {
           aria-label="Join Wander"
           className="relative px-6 py-20 md:px-16 md:py-32 lg:px-[108px]"
         >
-          <div className="mx-auto max-w-[1224px] overflow-hidden rounded-3xl border border-dark-gray/30 bg-surface/80 p-10 text-center backdrop-blur-sm md:p-16 animate-fade-in-up">
+          <div className="card-3d mx-auto max-w-[1224px] overflow-hidden rounded-3xl border border-dark-gray/30 bg-surface/80 p-10 text-center backdrop-blur-sm md:p-16 animate-fade-in-up">
             <Image
               src="/img/WandererIcon.png"
               alt="Wander logo"
@@ -247,7 +247,7 @@ export default function LandingPage() {
               className="mx-auto mb-6 rounded-xl"
             />
             <h2 className="font-display text-4xl text-white md:text-6xl lg:text-[76px]">
-              Join Wander Today
+              Join <span className="text-gradient">Wander</span> Today
             </h2>
             <p className="mx-auto mt-4 max-w-lg font-body text-lg text-offwhite">
               Start exploring your neighborhood in a whole new way. Every walk is
@@ -256,7 +256,7 @@ export default function LandingPage() {
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <a
                 href="#"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-10 py-4 font-body text-base font-bold uppercase text-black transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                className="btn-3d inline-flex items-center justify-center gap-2 rounded-full bg-primary px-10 py-4 font-body text-base font-bold uppercase text-black transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 Get Started Free
               </a>

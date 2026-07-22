@@ -8,12 +8,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#C3B1FF",
-        background: "#1E0031",
-        surface: "#1A1A1A",
-        "icon-bg": "#222222",
-        offwhite: "#C7C7C7",
-        "dark-gray": "#484848",
+        primary: "#00D26A",
+        "primary-light": "#4AE88A",
+        "primary-dark": "#00A352",
+        accent: "#00E5FF",
+        background: "#0A0F1A",
+        surface: "#111827",
+        "surface-elevated": "#1F2937",
+        "icon-bg": "#1F2937",
+        offwhite: "#E2E8F0",
+        "dark-gray": "#374151",
       },
       fontFamily: {
         display: ["var(--font-display)", "cursive"],

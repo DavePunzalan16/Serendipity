@@ -4,12 +4,16 @@
 
 @layer base {
   :root {
-    --color-primary: #C3B1FF;
-    --color-background: #1E0031;
-    --color-surface: #1A1A1A;
-    --color-icon-bg: #222222;
-    --color-offwhite: #C7C7C7;
-    --color-dark-gray: #484848;
+    --color-primary: #00D26A;
+    --color-primary-light: #4AE88A;
+    --color-primary-dark: #00A352;
+    --color-accent: #00E5FF;
+    --color-background: #0A0F1A;
+    --color-surface: #111827;
+    --color-surface-elevated: #1F2937;
+    --color-icon-bg: #1F2937;
+    --color-offwhite: #E2E8F0;
+    --color-dark-gray: #374151;
     --font-display: 'Bebas Neue', cursive;
     --font-body: 'Manrope', sans-serif;
   }
@@ -18,6 +22,46 @@
     @apply bg-background text-offwhite;
     font-family: var(--font-body);
   }
+}
+
+/* Green gradient utilities */
+.gradient-green {
+  background: linear-gradient(135deg, #00D26A 0%, #00E5FF 100%);
+}
+
+.gradient-dark {
+  background: linear-gradient(180deg, #0A0F1A 0%, #111827 100%);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #00D26A 0%, #00E5FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 3D Card utility */
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-3d:hover {
+  transform: translateY(-4px) rotateX(2deg) rotateY(-1deg);
+  box-shadow: 0 20px 40px rgba(0, 210, 106, 0.15), 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* 3D Button style */
+.btn-3d {
+  position: relative;
+  transform: translateY(0);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 4px 0 #00A352, 0 6px 20px rgba(0, 210, 106, 0.2);
+}
+
+.btn-3d:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #00A352, 0 2px 8px rgba(0, 210, 106, 0.1);
 }
 
 /* Custom animations */
@@ -36,11 +80,74 @@
   animation: fadeInUp 0.6s ease-out forwards;
 }
 
+/* 3D Loading Screen animations */
+@keyframes spin3d {
+  0% {
+    transform: perspective(600px) rotateY(0deg);
+  }
+  100% {
+    transform: perspective(600px) rotateY(360deg);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 210, 106, 0.4), 0 0 60px rgba(0, 210, 106, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 210, 106, 0.7), 0 0 100px rgba(0, 229, 255, 0.2);
+  }
+}
+
+@keyframes dotPulse {
+  0%, 20% { opacity: 0; }
+  50% { opacity: 1; }
+  80%, 100% { opacity: 0; }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.animate-spin-3d {
+  animation: spin3d 2s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.animate-fade-out {
+  animation: fadeOut 0.5s ease-out forwards;
+}
+
+.loading-dot:nth-child(1) { animation: dotPulse 1.4s infinite; animation-delay: 0s; }
+.loading-dot:nth-child(2) { animation: dotPulse 1.4s infinite; animation-delay: 0.2s; }
+.loading-dot:nth-child(3) { animation: dotPulse 1.4s infinite; animation-delay: 0.4s; }
+
 /* Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-in-up {
+  .animate-fade-in-up,
+  .animate-spin-3d,
+  .animate-pulse-glow,
+  .animate-fade-out {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+
+  .card-3d:hover {
+    transform: none;
+  }
+
+  .loading-dot {
+    animation: none;
+    opacity: 1;
   }
 }
