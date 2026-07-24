@@ -55,12 +55,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "expo-camera",
     "expo-notifications",
     "expo-secure-store",
-    [
-      "react-native-reanimated/plugin",
-      {
-        relativeSourceLocation: true,
-      },
-    ],
   ],
   experiments: {
     typedRoutes: true,
